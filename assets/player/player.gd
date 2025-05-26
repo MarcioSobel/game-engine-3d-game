@@ -1,14 +1,21 @@
 extends CharacterBody3D
 
-const SPEED := 100.0
-const JUMP_VELOCITY := 4.5
+const SPEED := 200.0
+const JUMP_VELOCITY := 6.0
 const ROTATION_SPEED := 12.0
 
 @onready var animation_player: AnimationPlayer = %AnimationPlayer
+@onready var player_song: AudioStreamPlayer3D = %PlayerSong
 
 var _last_movement_direction := Vector3.BACK
+var _playing_song = false
+
+func _ready() -> void:
+	player_song.playing = true
 
 func _physics_process(delta: float) -> void:
+		
+	player_song.stream_paused = !_playing_song
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
@@ -33,6 +40,8 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 	
+	_playing_song = true
+	
 	if move_dir.length() > 0.2:
 		_last_movement_direction = move_dir
 		if is_on_floor() and not  animation_player.is_playing():
@@ -42,6 +51,7 @@ func _physics_process(delta: float) -> void:
 		global_rotation.y = lerp_angle(global_rotation.y, target_angle - PI/3, ROTATION_SPEED * delta)
 	elif is_on_floor():
 		animation_player.play("RESET")
+		_playing_song = false
 
 func _get_active_camera() -> Camera3D:
 	for camera in get_tree().get_nodes_in_group("cameras"):
