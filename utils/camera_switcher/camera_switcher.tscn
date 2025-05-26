@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://kspjp1ps1uco"]
+
+[ext_resource type="Script" uid="uid://dfp7r46dvnclw" path="res://utils/camera_switcher/camera_switcher.gd" id="1_rp2ro"]
+
+[node name="CameraSwitcher" type="Area3D"]
+script = ExtResource("1_rp2ro")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
