@@ -53,3 +53,7 @@ jump={
 3d_physics/layer_1="world"
 3d_physics/layer_2="player"
 3d_physics/layer_3="hazard"
+
+[rendering]
+
+textures/vram_compression/import_etc2_astc=true

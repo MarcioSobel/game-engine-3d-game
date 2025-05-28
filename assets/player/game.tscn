@@ -1,10 +1,17 @@
-[gd_scene load_steps=31 format=3 uid="uid://02v11giqwnqg"]
+[gd_scene load_steps=34 format=3 uid="uid://02v11giqwnqg"]
 
 [ext_resource type="PackedScene" uid="uid://be07sd4dosnss" path="res://assets/player/player.tscn" id="1_805a3"]
 [ext_resource type="Script" uid="uid://bdvn1ucmp0mpu" path="res://assets/camera/camera_with_target.gd" id="2_3f4ne"]
 [ext_resource type="PackedScene" uid="uid://kspjp1ps1uco" path="res://utils/camera_switcher/camera_switcher.tscn" id="2_kjjkw"]
 [ext_resource type="PackedScene" uid="uid://uix4n7rmi8hn" path="res://utils/camera_with_light/camera_with_light.tscn" id="3_7t3go"]
 [ext_resource type="Texture2D" uid="uid://ci6t7vgooq57b" path="res://assets/scenario/arrow.png" id="5_rly5g"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sp11q"]
+shading_mode = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_qq4s6"]
+material = SubResource("StandardMaterial3D_sp11q")
+size = Vector3(0.01, 0.5, 0.01)
 
 [sub_resource type="BoxMesh" id="BoxMesh_v4uon"]
 size = Vector3(10, 0.1, 10)
@@ -20,6 +27,14 @@ size = Vector3(10, 5, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rly5g"]
 size = Vector3(4, 6.27246, 0.517578)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rly5g"]
+albedo_color = Color(0.801264, 1.54018e-06, 6.73831e-07, 1)
+roughness = 0.6
+
+[sub_resource type="TextMesh" id="TextMesh_0oij7"]
+material = SubResource("StandardMaterial3D_rly5g")
+text = "Use \"WASD\" to move"
 
 [sub_resource type="BoxMesh" id="BoxMesh_7t3go"]
 size = Vector3(10, 0.1, 10)
@@ -56,10 +71,6 @@ size = Vector3(0.271484, 3.79395, 2.72363)
 [sub_resource type="BoxShape3D" id="BoxShape3D_qq4s6"]
 size = Vector3(13.37, 9.70312, 0.154297)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rly5g"]
-albedo_color = Color(0.801264, 1.54018e-06, 6.73831e-07, 1)
-roughness = 0.6
-
 [sub_resource type="TextMesh" id="TextMesh_rly5g"]
 material = SubResource("StandardMaterial3D_rly5g")
 text = "Press \"Space\" to jump"
@@ -89,12 +100,17 @@ script/source = "extends Area3D
 
 @export var target: Camera3D
 
-
 func _on_body_entered(body: Node3D) -> void:
 	var animation_player: AnimationPlayer = body.get_node(\"AnimationPlayer\")
 	if animation_player:
 		animation_player.play(\"jump_loop\")
-		
+	var particles: CPUParticles3D = body.get_node(\"FallingParticles\")
+	wait_with_callback(5.0, func(): 
+		if particles:
+			particles.emitting = true
+			particles.visible = true
+	)
+	
 	await wait(5.0)
 	var old_camera := get_tree().get_first_node_in_group(\"active_camera\")
 	if old_camera:
@@ -103,10 +119,15 @@ func _on_body_entered(body: Node3D) -> void:
 	target.current = true
 	target.add_to_group(\"active_camera\")
 	await wait(3.0)
+	
 	%UI.visible = true
 
 func wait(seconds: int) -> void:
 	await get_tree().create_timer(seconds).timeout
+
+func wait_with_callback(seconds: int, callback: Callable) -> void:
+	await get_tree().create_timer(seconds).timeout
+	callback.call()
 "
 
 [sub_resource type="Environment" id="Environment_rly5g"]
@@ -119,7 +140,22 @@ background_color = Color(0.0383972, 0.0383972, 0.0383972, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0562033, 0)
 
 [node name="CameraWithLight" parent="Player" instance=ExtResource("3_7t3go")]
-transform = Transform3D(0.652767, -0.00931328, 0.757502, 0, 0.999924, 0.0122938, -0.757559, -0.00802499, 0.652717, 1.09453, 0.676082, 0.754579)
+transform = Transform3D(0.652767, 0.016415, 0.757381, 0, 0.999765, -0.0216683, -0.757559, 0.0141443, 0.652614, 1.09453, 0.564647, 0.754579)
+
+[node name="FallingParticles" type="CPUParticles3D" parent="Player"]
+transform = Transform3D(0.804863, 0, -0.593461, 0, 1, 0, 0.593461, 0, 0.804863, -0.656304, -1.83722, -0.726718)
+visible = false
+amount = 80
+lifetime = 0.5
+local_coords = true
+mesh = SubResource("BoxMesh_qq4s6")
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 9.92)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 20.0
 
 [node name="Sections" type="Node3D" parent="."]
 
@@ -205,6 +241,17 @@ target = NodePath("../CameraWithLight")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sections/Section1/CameraSwitcher"]
 transform = Transform3D(0.828579, 0, -0.559873, 0, 1, 0, 0.559873, 0, 0.828579, -0.651777, 0, -0.440408)
 shape = SubResource("BoxShape3D_rly5g")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Sections/Section1"]
+transform = Transform3D(1.59605, 0, 2.45751, 0, 2.93031, 0, -2.45751, 0, 1.59605, -2.97254, 1.6372, -2.62587)
+mesh = SubResource("TextMesh_0oij7")
+skeleton = NodePath("../../Section2")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sections/Section1/MeshInstance3D2"]
+transform = Transform3D(0.341261, 0, 0, 0, 0.341261, 0, 0, 0, 0.341261, -0.0315205, 0, 0.181676)
+light_color = Color(1, 0, 0, 1)
+light_energy = 0.1
+light_size = 1.0
 
 [node name="Section2" type="Node3D" parent="Sections"]
 
@@ -332,6 +379,12 @@ shape = SubResource("BoxShape3D_qq4s6")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Sections/Section2"]
 transform = Transform3D(2.90075, 0, -0.415163, 0, 2.93031, 0, 0.415163, 0, 2.90075, -1.5834, 1.6372, -14.1556)
 mesh = SubResource("TextMesh_rly5g")
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Sections/Section2/MeshInstance3D"]
+transform = Transform3D(0.143451, 0, 0.309646, 0, 0.341261, 0, -0.309646, 0, 0.143451, 0, 0, 0)
+light_color = Color(1, 0, 0, 1)
+light_energy = 0.1
+light_size = 1.0
 
 [node name="Section3" type="Node3D" parent="Sections"]
 

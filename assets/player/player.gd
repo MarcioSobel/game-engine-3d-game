@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED := 200.0
+const SPEED := 125.0
 const JUMP_VELOCITY := 6.0
 const ROTATION_SPEED := 12.0
 

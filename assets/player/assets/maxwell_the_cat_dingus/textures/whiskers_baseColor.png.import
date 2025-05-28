@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ct5ot6rytss47"
 path.s3tc="res://.godot/imported/whiskers_baseColor.png-7c52f9b7573cbdc32430d985bbec99db.s3tc.ctex"
+path.etc2="res://.godot/imported/whiskers_baseColor.png-7c52f9b7573cbdc32430d985bbec99db.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/player/assets/maxwell_the_cat_dingus/textures/whiskers_baseColor.png"
-dest_files=["res://.godot/imported/whiskers_baseColor.png-7c52f9b7573cbdc32430d985bbec99db.s3tc.ctex"]
+dest_files=["res://.godot/imported/whiskers_baseColor.png-7c52f9b7573cbdc32430d985bbec99db.s3tc.ctex", "res://.godot/imported/whiskers_baseColor.png-7c52f9b7573cbdc32430d985bbec99db.etc2.ctex"]
 
 [params]
 

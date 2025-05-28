@@ -10,7 +10,6 @@ Absolutely terrifying maxwell experience. Download on the [Releases](https://git
 - Gustavo Portela Pachêco - 01604533
 - José Gabriel de Oliveira Lino - 01609620
 - Márcio Cavalcanti Sobel - 01578025
-- Rafael Antônio Ribeiro Galvão Mendes - 01604007
 - Rodrigo Andrade Cavalcante Muniz - 01606059
 
 ## Credits

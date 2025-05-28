@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dwhq0ojix0pby"
 path.s3tc="res://.godot/imported/dingus_baseColor.jpeg-92e58ce86c569d6de5bbc59c1bc3460b.s3tc.ctex"
+path.etc2="res://.godot/imported/dingus_baseColor.jpeg-92e58ce86c569d6de5bbc59c1bc3460b.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/player/assets/maxwell_the_cat_dingus/textures/dingus_baseColor.jpeg"
-dest_files=["res://.godot/imported/dingus_baseColor.jpeg-92e58ce86c569d6de5bbc59c1bc3460b.s3tc.ctex"]
+dest_files=["res://.godot/imported/dingus_baseColor.jpeg-92e58ce86c569d6de5bbc59c1bc3460b.s3tc.ctex", "res://.godot/imported/dingus_baseColor.jpeg-92e58ce86c569d6de5bbc59c1bc3460b.etc2.ctex"]
 
 [params]
 
